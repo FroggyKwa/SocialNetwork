@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body
+{
+  background-color: #52a382;
+}
+p
+{
+  font-weight: bold;
+}
+</style>
+<div class="form">
+<form action="" method="post" class="green-form" novalidate>
+  <h1>Add post</h1>
+    {{ form.hidden_tag() }}
+    {{ form.content(type="text", cols="30", rows="10", class="form-control", placeholder="Type your post here") }}<br>
+    <p>{{ form.submit(type="submit", class="btn btn-primary green-btn") }}</p>
+</form>
+</div>
+{% endblock %}

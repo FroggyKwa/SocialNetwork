@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+   integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+   crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="{{ url_for('static', filename='js/update_feed.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/load_feed.js') }}"></script>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="static/css/post.css">
+  <title>Kwakker</title>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <a href="/" id="logo-link">Kwakker<img src="{{ url_for('static', filename='img/logo.png') }}" width=50 alt="logo"></a>
+  </div>
+  {% if not current_user.is_authenticated %}
+  <div class="header-btns">
+    <a href="/login" id="sign_in_btn">Login</a>
+    <a href="/signup" id="sign_up_btn">Sign Up</a>
+  </div>
+  {% else %}
+  <div class="header-btns">
+    <a href="/logout" id="sign_out_btn">Log Out</a>
+  </div>
+  {% endif %}
+  {% if can_edit_profile %}
+  <div class="header-btns">
+    <a href="/edit" id="edit_profile">Edit Profile</a>
+  </div>
+  {% endif %}
+</div>
+{% block content %}
+
+{% endblock %}
+{% if current_user.is_authenticated %}
+<div class="footer">
+  <div class="buttons">
+    <a href="/feed">
+    <img src="{{ url_for('static', filename='img/news.png') }}" width=40 alt="">
+    </a>
+    <a href="/add_post">
+    <img src="{{ url_for('static', filename='img/write.png') }}" width=40 alt="">
+    </a>
+    <a href="/search">
+    <img src="{{ url_for('static', filename='img/search.png') }}" width=40 alt="">
+    </a>
+    <a href="/{{ current_user.username }}">
+    <img src="{{ url_for('static', filename='img/profile.png') }}" width=40 alt="">
+    </a>
+    <a id="info_button" href="/team">
+    <img src="{{ url_for('static', filename='img/info.png') }}" width=40 alt="">
+    </a>
+  </div>
+</div>
+{% endif %}
+</body>
+</html>

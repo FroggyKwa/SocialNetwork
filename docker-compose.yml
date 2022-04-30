@@ -14,7 +14,7 @@ services:
       NAME: "${NAME}"
     restart: always
     volumes:
-      - static:/usr/src/SocialNetwork/static
+      - static:/usr/src/SocialNetwork/social_network/static
     depends_on:
       - db
 

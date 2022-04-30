@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body
+{
+  background-color: #52a382;
+}
+p
+{
+  font-weight: bold;
+}
+</style>
+<div class="form">
+    <form action="" method="post" class="green-form" enctype="multipart/form-data"
+          novalidate >
+        <h1>Edit user data</h1>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username(class="form-control", placeholder="Username") }}<br>
+        </p>
+        <p>
+            {{ form.name(class="form-control", placeholder="Name") }}<br>
+        </p>
+        <p>
+            {{ form.surname(class="form-control", placeholder="Surname") }}<br>
+        </p>
+        <p>
+            {{ form.status(class="form-control", placeholder="Type your thoughts here...") }}<br>
+        </p>
+        <p>
+            {{ form.password(class="form-control", type="password", placeholder="Password") }}<br>
+        </p>
+        <p class="custom-file">
+            {{ form.avatar(class="custom-file-input", id="customFile", type="file") }}<br>
+            <label class="custom-file-label" for="customFile">Choose file</label>
+        </p>
+        <script>
+    $(".custom-file-input").on("change", function() {
+      var fileName = $(this).val().split("\\").pop();
+      $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+  </script>
+        <p id="btn-container">{{ form.submit(type="submit", class="btn btn-primary green-btn") }}</p>
+    </form>
+</div>
+{% endblock %}

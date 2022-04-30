@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="outer">
+<div class="feed" id="feed">
+    <script>load_feed()</script>
+</div>
+<button id="btn" class="green-btn" onclick="load_feed()">Загрузить еще</button>
+</div>
+{% endblock %}

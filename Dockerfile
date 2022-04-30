@@ -12,4 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . "/usr/src/${NAME}"
 EXPOSE ${PORT}
 
+
+CMD python manage.py makemigrations
+CMD python manage.py migrate
 CMD gunicorn SocialNetwork.asgi:application -w 4 -b 0.0.0.0:${PORT} -k uvicorn.workers.UvicornWorker 
