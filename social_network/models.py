@@ -75,6 +75,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
     description = models.TextField(max_length=512, blank=True, null=True)
+    rating = models.PositiveIntegerField()
     picture_url = UniqueImageField(
         upload_to="images/posts/",
         height_field=None,
