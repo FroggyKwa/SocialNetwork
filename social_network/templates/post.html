@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="post">
+  <a href="">
+    <h2 class="post-name">Hello</h2>
+  <img src="{% static 'images/test.png' %}" alt="" class="img-fluid">
+  </a>
+  <div class="d-flex justify-content-end flex-row container reaction-field">
+    <div class="reaction-button-container">
+      <button class="reaction-button btn">
+        <img class="unactive" src="{% static 'images/like.png' %}" alt="">
+      </button>
+    </div>
+    <div class="reaction-button-container">
+      <button class="reaction-button btn">
+        <img class="unactive" src="{% static 'images/dislike.png' %}" alt="">
+      </button>
+    </div>
+  </div>
+  </div>
+{% endblock %}
