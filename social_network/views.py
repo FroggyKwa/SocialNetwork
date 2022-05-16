@@ -7,8 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import View
 
-
-from social_network.forms import LoginForm
+from social_network.forms import LoginForm, SignUpForm
 
 
 class IndexView(LoginRequiredMixin, View):
@@ -40,3 +39,27 @@ class LoginView(View):
                 for error in response.json()["non_field_errors"]:
                     form.add_error(None, error)
         return render(request, "login.html", {"form": form, "errors": form.errors})
+
+
+class SignUpView(View):
+    def get(self, request, *args, **kwargs):
+        form = SignUpForm()
+        return render(request, "signup.html", {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            post_data = {
+                "username": form.cleaned_data["username"],
+                "email": form.cleaned_data["email"],
+                "password": form.cleaned_data["password"],
+            }
+            response = requests.post("http://localhost:8080/api/signup", data=post_data)
+            if response.status_code == 201:
+                user = User.objects.get(id=response.json()["id"])
+                login(request, user)
+                return HttpResponseRedirect("/")
+            else:
+                for error in response.json()["non_field_errors"]:
+                    form.add_error(None, error)
+        return render(request, "signup.html", {"form": form, "errors": form.errors})
