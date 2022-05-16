@@ -9,7 +9,4 @@ def validate_minimum_size(image):
     if height is not None and image.height < height:
         error = True
     if error:
-        raise ValidationError(
-            [f"Size should be at least {width} x {height} pixels."]
-        )
-
+        raise ValidationError([f"Size should be at least {width} x {height} pixels."])

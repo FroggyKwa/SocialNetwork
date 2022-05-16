@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -71,7 +71,6 @@ class SignUpSerializer(serializers.ModelSerializer):
     def validate(self, data):
         super().validate(data)
         email = data.get("email", None)
-        print(email)
         if email and User.objects.filter(email__exact=email).exists():
             raise serializers.ValidationError("Email has already exists")
         return data

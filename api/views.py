@@ -1,3 +1,4 @@
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.generics import RetrieveUpdateAPIView
@@ -7,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.request import Request
 
 from api.serializers import SignUpSerializer, SignInSerializer, UserSerializer
+from social_network.forms import LoginForm
 from social_network.models import Post
 
 
@@ -37,7 +39,6 @@ class SignUpAPIView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        print(type(user))
         return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
 
 
@@ -48,14 +49,13 @@ class LogInApiView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = UserSerializer
-    lookup_field = 'username'
+    lookup_field = "username"
 
     def retrieve(self, request, username, *args, **kwargs):
         user = User.objects.get(username__exact=username)
