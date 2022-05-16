@@ -31,7 +31,7 @@ class Profile(models.Model):
     def save(self, *args, **kwargs):
         super(Profile, self).save(*args, **kwargs)
 
-    def make_thumbnail(self):
+    def make_thumbnail(self):  # TODO: MAKE IMAGE MODEL
         image = Image.open(self.avatar)
         image.thumbnail((512, 512), Image.ANTIALIAS)
         th_name, th_ext = os.path.splitext(self.avatar.name)
@@ -49,7 +49,9 @@ class Profile(models.Model):
         image.save(temp_th, filetype)
         temp_th.seek(0)
 
-        self.avatar_thumbnail.save(thumb_filename, ContentFile(temp_th.read()), save=False)
+        self.avatar_thumbnail.save(
+            thumb_filename, ContentFile(temp_th.read()), save=False
+        )
         temp_th.close()
         return True
 
@@ -78,7 +80,7 @@ class Post(models.Model):
         height_field=None,
         width_field=None,
         null=True,
-        validators=[validators.validate_minimum_size(1000, 1000)],
+        validators=[validators.validate_minimum_size],
     )
     thumbnail_url = UniqueImageField(
         upload_to="images/posts/thumbnails",
@@ -89,7 +91,7 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.make_thumbnail():
-            raise Exception('Could not create thumbnail - is the file type valid?')
+            raise Exception("Could not create thumbnail - is the file type valid?")
 
         super(Post, self).save(*args, **kwargs)
 
