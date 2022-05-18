@@ -1,6 +1,5 @@
 import requests
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
@@ -15,15 +14,19 @@ class IndexView(LoginRequiredMixin, View):
     redirect_field_name = "redirect_to"
 
     def get(self, request, *args, **kwargs):
-        return render(request, "base.html")
+        return render(request, "post.html")
 
 
 class LoginView(View):
     def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect("/")
         form = LoginForm()
         return render(request, "login.html", {"form": form})
 
     def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponse("You are already authenticated.")
         form = LoginForm(request.POST)
         if form.is_valid():
             post_data = {
@@ -43,10 +46,14 @@ class LoginView(View):
 
 class SignUpView(View):
     def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect("/")
         form = SignUpForm()
         return render(request, "signup.html", {"form": form})
 
     def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponse("You are already authenticated.")
         form = SignUpForm(request.POST)
         if form.is_valid():
             post_data = {

@@ -22,11 +22,17 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     subscriptions = models.ManyToManyField(User, blank=True, related_name="subscribers")
     avatar = UniqueImageField(
-        upload_to="images/users/avatars/", default="avatars/default.jpg"
+        upload_to="images/users/avatars/", default="images  /default.png"
     )
     avatar_thumbnail = UniqueImageField(
-        upload_to="images/users/avatars/thumbnails", default="avatars/default.jpg"
+        upload_to="images/users/avatars/thumbnails", default="images/default.png"
     )
+
+    def get_avatar(self):
+        return self.avatar
+
+    def get_avatar_thumbnail(self):
+        return self.avatar_thumbnail
 
     def save(self, *args, **kwargs):
         super(Profile, self).save(*args, **kwargs)
