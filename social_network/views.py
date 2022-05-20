@@ -15,8 +15,8 @@ class IndexView(LoginRequiredMixin, View):
     redirect_field_name = "redirect_to"
 
     def get(self, request, *args, **kwargs):
-        feed = requests.get("localhost:8080/get_feed", data={"user_id", request.user.id})
-        return render(request, "feed.html", context={"feed": feed})
+        feed = requests.get("http://localhost:8080/api/get_feed", data={"user_id": request.user.id}).json()
+        return render(request, "feed.html", context={"post": feed[0] if feed else None})
 
 
 class LoginView(View):

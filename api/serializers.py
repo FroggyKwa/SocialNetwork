@@ -58,7 +58,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["author", "name", "description", "picture_url", "thumbnail_url", "rating"]
+        fields = ["id", "author", "name", "description", "picture_url", "thumbnail_url", "rating"]
 
 
 class PostUploadSerializer(serializers.ModelSerializer):
@@ -139,6 +139,7 @@ class PostLikeSerializer(serializers.Serializer):
         if user in set(post.dislikes.all()):
             post.dislikes.remove(user)
         post.likes.add(user)
+        return post
 
 
 class PostDislikeSerializer(serializers.Serializer):
@@ -161,3 +162,4 @@ class PostDislikeSerializer(serializers.Serializer):
             post.likes.remove(user)
         post.dislikes.add(user)
         post.save()
+        return post

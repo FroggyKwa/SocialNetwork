@@ -93,8 +93,8 @@ class PostLikeAPIview(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid()
-        serializer.save()
-        return Response(status=status.HTTP_200_OK)
+        post = serializer.save()
+        return Response(PostSerializer(post).data, status=status.HTTP_200_OK)
 
 
 class PostDisLikeAPIview(APIView):
@@ -106,8 +106,8 @@ class PostDisLikeAPIview(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid()
-        serializer.save()
-        return Response(status=status.HTTP_200_OK)
+        post = serializer.save()
+        return Response(PostSerializer(post).data, status=status.HTTP_200_OK)
 
 
 class GetUserFeed(APIView):
