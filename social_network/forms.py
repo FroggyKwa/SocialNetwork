@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 
+from social_network.models import Post
+
 
 class LoginForm(forms.Form):
     username = forms.CharField()
@@ -27,3 +29,14 @@ class SignUpForm(forms.ModelForm):
 
         if password != confirm_password:
             raise forms.ValidationError("Passwords do not match.")
+
+
+class PostUploadForm(forms.ModelForm):
+    name = forms.CharField(max_length=64)
+    description = forms.CharField(widget=forms.Textarea)
+    picture_url = forms.ImageField(required=False, label="Select an image")
+    help_text = "Minimum resolution 500x500."
+
+    class Meta:
+        model = Post
+        fields = ("name", "description", "picture_url")

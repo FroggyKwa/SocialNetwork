@@ -81,7 +81,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
     description = models.TextField(max_length=512, blank=True, null=True)
-    rating = models.PositiveIntegerField()
+    likes = models.ManyToManyField(User, related_name="liked_posts")
+    dislikes = models.ManyToManyField(User, related_name="disliked_posts")
     picture_url = UniqueImageField(
         upload_to="images/posts/",
         height_field=None,
@@ -96,11 +97,12 @@ class Post(models.Model):
         null=True,
     )
 
-    def save(self, *args, **kwargs):
-        if not self.make_thumbnail():
-            raise Exception("Could not create thumbnail - is the file type valid?")
+    @property
+    def rating(self):
+        return self.get_rating()
 
-        super(Post, self).save(*args, **kwargs)
+    def get_rating(self):
+        return self.likes.count() - self.dislikes.count()
 
     def make_thumbnail(self):
         image = Image.open(self.picture_url)
@@ -123,6 +125,12 @@ class Post(models.Model):
         self.thumbnail_url.save(thumb_filename, ContentFile(temp_th.read()), save=False)
         temp_th.close()
         return True
+
+    def save(self, *args, **kwargs):
+        if not self.make_thumbnail():
+            raise Exception("Could not create thumbnail - is the file type valid?")
+
+        super(Post, self).save(*args, **kwargs)
 
     class Meta:
         db_table = "posts"

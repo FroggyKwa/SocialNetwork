@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework.generics import get_object_or_404
 from rest_framework.validators import UniqueValidator
 
 from social_network.models import Profile, Post
@@ -49,7 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = UserSerializer(required=True)
+    author = UserSerializer()
     name = serializers.CharField(max_length=64)
     description = serializers.CharField(max_length=512)
     picture_url = serializers.ImageField()
@@ -57,7 +58,21 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["author", "name", "picture_url", "thumbnail_url"]
+        fields = ["author", "name", "description", "picture_url", "thumbnail_url", "rating"]
+
+
+class PostUploadSerializer(serializers.ModelSerializer):
+    author_id = serializers.IntegerField()
+    name = serializers.CharField(max_length=64)
+    description = serializers.CharField(max_length=512)
+    picture_url = serializers.ImageField()
+
+    class Meta:
+        model = Post
+        fields = ("author_id", "name", "description", "picture_url")
+
+    def create(self, validated_data):
+        return Post.objects.create(**validated_data)
 
 
 class SignUpSerializer(serializers.ModelSerializer):
@@ -103,3 +118,46 @@ class SignInSerializer(serializers.Serializer):
         if not user.is_active:
             raise serializers.ValidationError("This user has been deactivated.")
         return UserSerializer(user).data
+
+
+
+class PostLikeSerializer(serializers.Serializer):
+    post_id = serializers.IntegerField()
+    user_id = serializers.IntegerField()
+
+    def save(self, **kwargs):
+        post_id = self.validated_data.get('post_id', None)
+        liker_id = self.validated_data.get('user_id', None)
+        if not post_id:
+            return serializers.ValidationError("Post id is required")
+        if not liker_id:
+            return serializers.ValidationError("User id is required")
+        post = get_object_or_404(Post, id=post_id)
+        user = get_object_or_404(User, id=liker_id)
+        if user in set(post.likes.all()):
+            raise serializers.ValidationError("User has already liked the post.")
+        if user in set(post.dislikes.all()):
+            post.dislikes.remove(user)
+        post.likes.add(user)
+
+
+class PostDislikeSerializer(serializers.Serializer):
+    post_id = serializers.IntegerField()
+    user_id = serializers.IntegerField()
+
+    def save(self, **kwargs):
+        post_id = self.validated_data.get('post_id', None)
+        disliker_id = self.validated_data.get('user_id', None)
+        if not post_id:
+            return serializers.ValidationError("Post id is required")
+        if not disliker_id:
+            return serializers.ValidationError("User id is required")
+
+        post = get_object_or_404(Post, pk=post_id)
+        user = get_object_or_404(User, pk=disliker_id)
+        if user in set(post.dislikes.all()):
+            raise serializers.ValidationError("User has already disliked the post.")
+        if user in set(post.likes.all()):
+            post.likes.remove(user)
+        post.dislikes.add(user)
+        post.save()

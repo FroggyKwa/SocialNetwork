@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Post Upload{% endblock %}
+
+{% block extra_head %}<link rel="stylesheet" href="{% static '/css/upload.css' %}">{% endblock %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center">
+<form method="post" enctype="multipart/form-data" class="text-center" action="">
+    <p>Please, use the following form to upload post:</p>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class= "submit-btn btn" type="submit" value="Upload post"/>
+  </form>
+  </div>
+
+
+{% endblock %}
