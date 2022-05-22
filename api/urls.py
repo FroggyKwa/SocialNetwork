@@ -14,5 +14,10 @@ urlpatterns = [
     path("post_like", views.PostLikeAPIview.as_view(), name="post_like"),
     path("post_dislike", views.PostDisLikeAPIview.as_view(), name="post_dislike"),
     path("post_info", views.PostRetrieveUpdateAPIView.as_view(), name="post_info"),
-    path("get_feed", views.GetUserFeed.as_view(), name="get_feed")
+    path("get_feed", views.GetUserFeedAPIView.as_view(), name="get_feed"),
+    path(
+        "query_by_username",
+        views.GetUsersQueryByUsernameAPIView.as_view(),
+        name="get_query",
+    ),
 ]

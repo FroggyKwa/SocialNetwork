@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,300;1,600;1,900&display=swap');
+
+
+body
+{
+  font-family: 'Nunito', sans-serif;
+  background-color: #2D2D2D;
+  color: #F5F5F5;
+}
+
+a
+{
+  transition: all 0.2s ease-out;
+  text-decoration: none;
+  color: #34BF89;
+}
+
+a:hover
+{
+  color: #F5F5F5;
+}
+
+
+.header
+{
+  width: 100%;
+  height: 100%;
+}
+#page-header-container
+{
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid #444444;
+  position: static;
+}
+
+.navbar-brand
+{
+  font-family: 'Nunito', sans-serif;
+  color: #34BF89;
+  font-style: italic;
+  font-weight: 900;
+  padding-left: 1em;
+  font-size: 2.5em;
+}
+
+.navbar-brand:hover
+{
+  color: #F5F5F5;
+}
+
+
+#header-logo::first-letter
+{
+  color: #F5F5F5;
+  font-size: 1.3em;
+}
+
+#navbarSupportedContent
+{
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.5em;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.nav-link {
+  color: #F5F5F5;
+  margin-left: 2em;
+  border: 1px solid none;
+  border-radius: 10px;
+  background-color: #3D3D3D;
+}
+
+.nav-link:hover
+{
+  background-color: #F5F5F5;
+  color: #2D2D2D;
+}
+
+#nav-username
+{
+  margin-right: 10px;
+}
+
+#profile-link-nav:hover
+{
+  background-color: none;
+  color: #F5F5F5;
+}
+
+#avatar-image-wrapper
+{
+  width: 50px;
+}
+
+#avatar-image-wrapper img
+{
+  filter: invert(1);
+  width: 100%;
+  height: auto;
+}
+
+#user-search
+{
+  padding-right: 2em;
+}
+
+#basic-addon1
+{
+  padding: 0.5em;
+}
+
+#search-button
+{
+  font-size: 1em;
+  padding: 3px;
+  background-color: #2D2D2D;
+  border: 1px solid #414141;
+}
+#search-button:hover
+{
+  background-color: #2D2D2D;
+}
+
+#search-icon-wrapper
+{
+  filter: invert(1);
+  width: 40px;
+  transition: filter 0.3s;
+}
+
+#search-icon-wrapper img
+{
+  width: 100%;
+  height: auto;
+}
+
+#search-icon-wrapper:hover
+{
+  filter: invert(0);
+}
+
+
+
+#search-friends-label
+{
+  background-color: #2D2D2D;
+  border-color: #F5F5F5;
+  color: #F5F5F5;
+}
+
+
+#post-upload-wrapper
+{
+  width: 4em;
+  margin-right: 2em;
+  margin-top: 0.3em;
+}
+
+#post-upload-wrapper a img
+{
+  filter: invert(1);
+  transition: filter 0.4s ease;
+}
+
+
+#post-upload-wrapper a img:hover
+{
+  filter: invert(0);
+}
+
+#post-upload-image
+{
+  width: 100%;
+  height: auto;
+}
+
+
+footer {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.2em;
+  height: 5em;
+  color: #F5F5F5;
+  letter-spacing: 3px;
+  flex-shrink: 0;
+  background-color: #262525;
+}

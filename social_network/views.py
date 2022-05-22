@@ -2,9 +2,17 @@ import requests
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import (
+    HttpResponse,
+    HttpResponseRedirect,
+    HttpResponseNotFound,
+    Http404,
+)
+from django.middleware.csrf import get_token
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from rest_framework import status
 
 from social_network.forms import LoginForm, SignUpForm, PostUploadForm
 from social_network.models import Post
@@ -15,7 +23,9 @@ class IndexView(LoginRequiredMixin, View):
     redirect_field_name = "redirect_to"
 
     def get(self, request, *args, **kwargs):
-        feed = requests.get("http://localhost:8080/api/get_feed", data={"user_id": request.user.id}).json()
+        feed = requests.get(
+            "http://localhost:8080/api/get_feed", data={"user_id": request.user.id}
+        ).json()
         return render(request, "feed.html", context={"post": feed[0] if feed else None})
 
 
@@ -90,10 +100,13 @@ class PostUploadView(View, LoginRequiredMixin):
                 "name": form.cleaned_data["name"],
                 "description": form.cleaned_data["description"],
             }
+            session_id = request.session.session_key
+            csrf_token = get_token(request)
             response = requests.post(
                 "http://localhost:8080/api/upload_post",
                 data=post_data,
                 files={"picture_url": request.FILES["picture_url"]},
+                headers={"sessionid": session_id, "csrftoken": csrf_token}
             )
             if response.status_code == 201:
                 return render(request, "post_success.html")
@@ -115,3 +128,35 @@ class PostDetailView(View, LoginRequiredMixin):
             "post_detail.html",
             context={"post": get_object_or_404(Post, pk=post_id)},
         )
+
+
+class UserSearchView(View, LoginRequiredMixin):
+    login_url = "login_view"
+    redirect_field_name = "redirect_to"
+
+    def get(self, request, username, *args, **kwargs):
+        session_id = request.session.session_key
+        csrf_token = get_token(request)
+        users = requests.get(
+            "http://localhost:8080/api/query_by_username",
+            data={"username": username, "exclude_username": request.user.username},
+            headers={"sessionid": session_id, "csrftoken": csrf_token}
+        ).json()
+        if not users:
+            raise Http404
+        print(users)
+        return render(request, "users_search.html", context={"users": users})
+
+
+class ProfilePageView(View, LoginRequiredMixin):
+    login_url = "login_view"
+    redirect_field_name = "redirect_to"
+
+    def get(self, request, *args, **kwargs):
+        username = kwargs["username"]
+        try:
+            user = User.objects.get(username__exact=username)
+        except ObjectDoesNotExist:
+            raise Http404
+        return render(request, "profile_page.html", context={"u": user})
+

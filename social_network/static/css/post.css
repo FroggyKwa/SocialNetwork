@@ -1,0 +1,73 @@
+.post
+{
+  margin: 5em;
+}
+.post-name
+{
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+}
+
+.post a:hover
+{
+  color: #F5F5F5;
+}
+
+.reaction-field
+{
+  margin-right: 0;
+}
+
+.post a img
+{
+  width: 100%;
+}
+
+.reaction-button-container
+{
+  padding: 2em;
+}
+
+.reaction-button
+{
+  border:none;
+  display: block;
+  width: 70px;
+}
+
+.reaction-button img
+{
+  width: 100%;
+  height: auto;
+}
+.unactive
+{
+  -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    transition: filter 0.4s;
+}
+.unactive:hover
+{
+  -webkit-filter: grayscale(0%);
+    filter: grayscale(0%);
+}
+
+.next-button
+{
+  border:none;
+  padding: 0;
+  display: block;
+  width: 70px;
+}
+.next-button img
+{
+  width: 100%;
+  height: auto;
+  filter: invert(1);
+  transition: 0.3s;
+}
+
+.next-button img:hover
+{
+  filter: invert(0);
+}

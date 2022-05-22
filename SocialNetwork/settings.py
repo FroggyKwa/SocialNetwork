@@ -3,6 +3,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from dotenv import load_dotenv
+import mimetypes
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -12,15 +13,41 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-(48akr%%07pi$!l7b^$jxc7w%^6mzwo(911zub_1(0vzqmfmgt"
 
+# ALLOWED_HOSTS = ['localhost:8080']
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
+mimetypes.add_type("text/css", ".css", True)
+ALLOWED_HOSTS = ["localhost"]
 DEBUG = True
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": "/tmp/debug.log",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
+}
+
 
 TIME_ZONE = "Asia/Vladivostok"
 USE_TZ = True
 
 load_dotenv(".env")
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['localhost:8080']
 
 # Application definition
 
@@ -47,6 +74,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ),
 }
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

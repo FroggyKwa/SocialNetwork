@@ -35,21 +35,31 @@
                 {% else %}
                 <!-- If authorized -->
                 <div class="d-flex flex-row" id="post-upload-wrapper">
-                  <a href="post_upload" title="Add post">
+                  <a href="/post_upload" title="Add post">
                   <img id="post-upload-image" src="{% static 'images/plus.png' %}" alt="">
                   </a>
                 </div>
                 <div id="user-search" class="input-group m-auto">
                   <label id="search-friends-label" class="input-group-text" for="search-friends">Search friends</label>
                   <input id="search-friends" type="search" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                  <button id="search-button" class="nav-link btn btn-outline-secondary" type="button">Search</button>
+                  <button id="search-button" class="nav-link btn" type="button">
+                    <div id="search-icon-wrapper">
+                    <img src="{% static 'images/magnifying-glass.svg' %}" alt="">
+                    </div>
+                  </button>
+                  <script type="text/javascript">
+                    search_query = document.getElementById("search-friends");
+                    document.getElementById("search-button").onclick = function () {
+                    location.href = "/users/" + search_query.value;
+                    };
+                  </script>
 
                 </div>
                 <li id="profile-link-nav">
-                  <a href="user/{{ user.get_username }}" class = "d-flex flex-column" id="profile-link">
+                  <a href="/user/{{ user.get_username }}" class = "d-flex flex-column" id="profile-link">
                     <span id="nav-username">{{ user.get_username }}</span>
                     <div id="avatar-image-wrapper" class="m-auto">
-                      <img id="" src="{% static '' %}{{ user.profile.get_avatar_thumbnail }}" title="Profile image" alt="">
+                      <img id="" src="{{ user.profile.get_avatar_thumbnail }}" title="Profile image" alt="">
                     </div>
                   </a>
                 </li>

@@ -1,0 +1,16 @@
+#bio
+{
+  color: #F5F5F5;
+  font-family: 'Nunito', sans-serif;
+}
+
+#bio-heading
+{
+  margin-top: 1em;
+  font-size: 2em;
+}
+
+#bio-text
+{
+  font-size: 1.3em;
+}

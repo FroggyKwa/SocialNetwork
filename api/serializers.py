@@ -58,7 +58,15 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["id", "author", "name", "description", "picture_url", "thumbnail_url", "rating"]
+        fields = [
+            "id",
+            "author",
+            "name",
+            "description",
+            "picture_url",
+            "thumbnail_url",
+            "rating",
+        ]
 
 
 class PostUploadSerializer(serializers.ModelSerializer):
@@ -120,14 +128,13 @@ class SignInSerializer(serializers.Serializer):
         return UserSerializer(user).data
 
 
-
 class PostLikeSerializer(serializers.Serializer):
     post_id = serializers.IntegerField()
     user_id = serializers.IntegerField()
 
     def save(self, **kwargs):
-        post_id = self.validated_data.get('post_id', None)
-        liker_id = self.validated_data.get('user_id', None)
+        post_id = self.validated_data.get("post_id", None)
+        liker_id = self.validated_data.get("user_id", None)
         if not post_id:
             return serializers.ValidationError("Post id is required")
         if not liker_id:
@@ -147,8 +154,8 @@ class PostDislikeSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
 
     def save(self, **kwargs):
-        post_id = self.validated_data.get('post_id', None)
-        disliker_id = self.validated_data.get('user_id', None)
+        post_id = self.validated_data.get("post_id", None)
+        disliker_id = self.validated_data.get("user_id", None)
         if not post_id:
             return serializers.ValidationError("Post id is required")
         if not disliker_id:

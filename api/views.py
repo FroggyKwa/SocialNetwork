@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.generics import RetrieveUpdateAPIView, get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -74,7 +75,9 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
 
 class PostRetrieveUpdateAPIView(RetrieveUpdateAPIView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
     serializer_class = PostSerializer
 
     def retrieve(self, request, *args, **kwargs):
@@ -86,7 +89,7 @@ class PostRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
 class PostLikeAPIview(APIView):
     permission_classes = [
-        AllowAny,
+        IsAuthenticated,
     ]
     serializer_class = PostLikeSerializer
 
@@ -99,7 +102,7 @@ class PostLikeAPIview(APIView):
 
 class PostDisLikeAPIview(APIView):
     permission_classes = [
-        AllowAny,
+        IsAuthenticated,
     ]
     serializer_class = PostDislikeSerializer
 
@@ -110,8 +113,23 @@ class PostDisLikeAPIview(APIView):
         return Response(PostSerializer(post).data, status=status.HTTP_200_OK)
 
 
-class GetUserFeed(APIView):
+class GetUserFeedAPIView(APIView):
     def get(self, request, *args, **kwargs):
-        print(request.data.get("user_id"))
         user = get_object_or_404(User, id=request.data.get("user_id", None))
         return Response(PostSerializer(get_feed_for_user(user), many=True).data)
+
+
+class GetUsersQueryByUsernameAPIView(APIView):
+    permission_classes = [
+        # IsAuthenticated,
+    ]
+
+    def get(self, request, *args, **kwargs):
+        query_username = request.data.get("username", None)
+        exclude_username = request.data.get("exclude_username", None)
+        queryset = (
+            User.objects.filter(username__icontains=query_username)
+                .exclude(username__exact=exclude_username)
+                .all()
+        )
+        return Response(UserSerializer(queryset, many=True).data)

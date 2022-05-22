@@ -1,0 +1,37 @@
+form
+{
+  font-size: 1.2em;
+  font-family: 'Nunito', sans-serif;
+}
+
+label {
+  display: inline-block;
+  width: 5em;
+  text-align: right;
+}​
+
+
+.form-name
+{
+  font-family: 'Nunito', sans-serif;
+  font-style: italic;
+  font-weight: 600;
+}
+
+input[type="submit"]
+{
+  color: #34BF89;
+  border-color: #34BF89;
+  transition: all 0.4s ease-out;
+}
+
+.submit-btn
+{
+  margin:5em;
+}
+
+.errorlist
+{
+  color: #D25C5C;
+  list-style-type: none;
+}
