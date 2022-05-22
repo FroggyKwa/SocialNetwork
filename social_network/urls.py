@@ -15,5 +15,7 @@ urlpatterns = [
         name="users_search"
     ),
     path("user/<username>", login_required(views.ProfilePageView.as_view(), "redirect_to", login_url="login_view"),
-         name="profile_page")
+         name="profile_page"),
+    path("/profile_update", login_required(views.ProfileUpdateView.as_view(), "redirect_to", login_url="login_view"),
+         name="profile_update"),
 ]

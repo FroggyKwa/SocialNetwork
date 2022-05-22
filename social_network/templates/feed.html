@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_head %}<link rel="stylesheet" href="{% static '/css/post.css' %}">{% endblock %}
+
+
+{% block content %}
+
+{% if post %}
+<div class="post">
+  <a href="post/{{ post.id }}">
+    <h2 class="post-name">{{ post.name }}</h2>
+  <img src="{{ post.picture_url }}" alt="" class="img-fluid">
+  </a>
+  <div class="d-flex justify-content-end flex-row container reaction-field">
+    <div class="reaction-button-container">
+      <button class="unactive reaction-button btn" id="btn-up">
+        <img src="{% static 'images/like.png' %}" alt="">
+        <span class="m-auto text-light like-amount">{{ post.rating }}</span>
+      </button>
+    </div>
+    <div class="reaction-button-container">
+      <button id="btn-down" class="unactive reaction-button btn">
+        <img src="{% static 'images/dislike.png' %}" alt="">
+      </button>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center">
+    <a href= "" id="next-btn" class="d-none btn next-button" name="button">
+      <img src="{% static 'images/next.png' %}" alt="">
+    </a>
+  </div>
+  </div>
+  <script>var post_id = {{ post.id }};
+          var user_id = {{ user.id }}
+  </script>
+  {% else %}
+  <div class="m-auto d-flex container justify-content-center">
+    <h1 class="display-1">Sorry, posts are over :(</h1>
+  </div>
+  {% endif %}
+{% endblock %}

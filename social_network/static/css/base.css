@@ -175,6 +175,18 @@ a:hover
   height: auto;
 }
 
+.my-button
+{
+  border-color: #F5F5F5;
+  color: #F5F5F5;
+}
+
+.my-button:hover
+{
+  background-color: #F5F5F5;
+  color: #2D2D2D;
+}
+
 
 footer {
   font-family: 'Nunito', sans-serif;

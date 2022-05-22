@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_head %}<link rel="stylesheet" href="{% static '/css/user_search.css' %}">{% endblock %}
+
+{% block content %}
+
+<div id="user-list" class="list-group list-group-flush container">
+  {% for u in users %}
+  <div id="user-block" class="d-flex flex-row">
+  <a href="/user/{{ u.username }}" class="d-flex justify-content-start flex-row user-item list-group-item list-group-item-action">
+    <div class="image-wrapper align-self-center" class="">
+      <img src="{{ user.profile.avatar_thumbnail }}" alt=""/>
+    </div>
+    <span class="username m-auto">{{ u.username }}</span>
+  </a>
+  <button id="add-friend-button" class="btn">Add friend</button>
+  </div>
+  {% endfor %}
+</div>
+
+
+{% endblock %}

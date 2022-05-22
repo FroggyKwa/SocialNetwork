@@ -1,0 +1,45 @@
+  {% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/profile.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column container">
+  <div class="user-base-info d-flex flex-column">
+    <div class=" d-flex">
+      <a href="{{ user.profile.avatar }}" id="avatar-wrapper">
+        <img src="{{ user.profile.get_avatar_thumbnail }}" alt="">
+      </a>
+    <div id="name-block">
+      <h1 id="username" class="display-3 align-self-center">{{ u.username }}</h1>
+      <h3 class="align-self-center real-name">{{ u.first_name }} {{ u.last_name }}</h3>
+    </div>
+
+
+    </div>
+    {% if u.profile.bio or u.profile.phone or u.profile.age %}
+    <hr class="splitter">
+    <div class="additional-info d-flex flex-row">
+      <div class="bio profile-section">
+        <h5 class="section-heading">Status:</h5>
+        <p>{{ u.profile.bio }}</p>
+      </div>
+      <hr class="splitter">
+      <div class="profile-section phone-number">
+      <h5 class="section-heading">Phone number:</h5>
+      <p>{{ u.profile.phone }}</p>
+      </div>
+      <hr class="splitter">
+      <div class="profile-section">
+        <h5 class="section-heading">Age:</h5>
+          <span id="age">{{ user.profile.age }} y.o.</span>
+      </div>
+    </div>
+    {% endif %}
+    {% if u == user %}
+    <a id="update-profile" href="/profile_update" class="btn my-button align-self-end">Update profile</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
