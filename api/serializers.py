@@ -1,8 +1,7 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
-from rest_framework.validators import UniqueValidator
 
 from social_network.models import Profile, Post
 
@@ -13,20 +12,68 @@ class ProfileRetrieveSerializer(serializers.ModelSerializer):
         fields = [
             "phone",
             "bio",
+            "age",
             "avatar",
             "avatar_thumbnail",
         ]
 
+
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(
+        allow_blank=True, allow_null=True, required=False, default=None
+    )
+    email = serializers.EmailField(
+        allow_blank=True,
+        required=False,
+    )
+    first_name = serializers.CharField(
+        allow_blank=True, allow_null=True, required=False, default=None
+    )
+    last_name = serializers.CharField(
+        allow_blank=True, allow_null=True, required=False, default=None
+    )
+    phone = serializers.CharField(
+        allow_blank=True, allow_null=True, required=False, default=None
+    )
+    age = serializers.IntegerField(allow_null=True, required=False, default=None)
+    bio = serializers.CharField(
+        allow_blank=True, allow_null=True, required=False, default=None
+    )
+    is_hidden = serializers.BooleanField(allow_null=True, required=False, default=None)
+    avatar = serializers.ImageField(allow_null=True, default=None)
+
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "phone",
+            "age",
+            "bio",
+            "avatar",
+            "is_hidden",
+        ]
+
     def update(self, instance, validated_data):
-        instance.username = validated_data.get("username", instance.username)
-        instance.first_name = validated_data.get("first_name", instance.first_name)
-        instance.last_name = validated_data.get("last_name", instance.last_name)
-        instance.email = validated_data.get("email", instance.email)
+        filtered = {
+            k: v for k, v in dict(validated_data).items() if v or k == "is_hidden"
+        }
+        print(filtered)
+        instance.username = filtered.get("username", instance.username)
+        instance.first_name = filtered.get("first_name", instance.first_name)
+        instance.last_name = filtered.get("last_name", instance.last_name)
+        instance.email = filtered.get("email", instance.email)
+        instance.profile.age = filtered.get("age", instance.profile.age)
+        instance.profile.bio = filtered.get("bio", instance.profile.bio)
+        instance.profile.phone = filtered.get("phone", instance.profile.phone)
+        instance.profile.avatar = filtered.get("avatar", instance.profile.avatar)
+        instance.profile.is_hidden = filtered.get(
+            "is_hidden", instance.profile.is_hidden
+        )
         instance.save()
         return instance
-
-    def get_image(self, obj):
-        return obj.image
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -34,7 +81,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        # fields = "__all__"
         exclude = ("password",)
 
     def update(self, instance, validated_data):
@@ -72,7 +118,7 @@ class PostSerializer(serializers.ModelSerializer):
 class PostUploadSerializer(serializers.ModelSerializer):
     author_id = serializers.IntegerField()
     name = serializers.CharField(max_length=64)
-    description = serializers.CharField(max_length=512)
+    description = serializers.CharField(max_length=512, allow_blank=True)
     picture_url = serializers.ImageField()
 
     class Meta:
@@ -132,13 +178,18 @@ class PostLikeSerializer(serializers.Serializer):
     post_id = serializers.IntegerField()
     user_id = serializers.IntegerField()
 
-    def save(self, **kwargs):
-        post_id = self.validated_data.get("post_id", None)
-        liker_id = self.validated_data.get("user_id", None)
+    def validate(self, data):
+        post_id = data.get("post_id", None)
+        liker_id = data.get("user_id", None)
         if not post_id:
             return serializers.ValidationError("Post id is required")
         if not liker_id:
             return serializers.ValidationError("User id is required")
+        return data
+
+    def save(self, **kwargs):
+        post_id = self.validated_data.get("post_id", None)
+        liker_id = self.validated_data.get("user_id", None)
         post = get_object_or_404(Post, id=post_id)
         user = get_object_or_404(User, id=liker_id)
         if user in set(post.likes.all()):
@@ -153,14 +204,18 @@ class PostDislikeSerializer(serializers.Serializer):
     post_id = serializers.IntegerField()
     user_id = serializers.IntegerField()
 
-    def save(self, **kwargs):
-        post_id = self.validated_data.get("post_id", None)
-        disliker_id = self.validated_data.get("user_id", None)
+    def validate(self, data):
+        post_id = data.get("post_id", None)
+        disliker_id = data.get("user_id", None)
         if not post_id:
             return serializers.ValidationError("Post id is required")
         if not disliker_id:
             return serializers.ValidationError("User id is required")
+        return data
 
+    def save(self, **kwargs):
+        post_id = self.validated_data.get("post_id", None)
+        disliker_id = self.validated_data.get("user_id", None)
         post = get_object_or_404(Post, pk=post_id)
         user = get_object_or_404(User, pk=disliker_id)
         if user in set(post.dislikes.all()):
@@ -170,3 +225,28 @@ class PostDislikeSerializer(serializers.Serializer):
         post.dislikes.add(user)
         post.save()
         return post
+
+
+class SubscribeSerializer(serializers.Serializer):
+    from_id = serializers.IntegerField(required=False)
+    to_id = serializers.IntegerField(required=False)
+
+    def validate(self, data):
+        from_id = data.get("from_id")
+        to_id = data.get("to_id")
+        if not to_id or not from_id:
+            raise serializers.ValidationError("No data provided.")
+        return data
+
+    def save(self, **kwargs):
+        from_id = self.validated_data.get("from_id")
+        to_id = self.validated_data.get("to_id")
+
+        subscribe_from = get_object_or_404(User, pk=from_id)
+        subscribe_to = get_object_or_404(User, pk=to_id)
+        if subscribe_from.profile in subscribe_to.subscribers.all():
+            subscribe_to.subscribers.remove(subscribe_from.profile)
+            return {"Success": "Subscribe"}
+        else:
+            subscribe_to.subscribers.add(subscribe_from.profile)
+            return {"Success": "Unsubscribe"}

@@ -3,19 +3,29 @@
 {% load static %}
 
 {% block extra_head %}<link rel="stylesheet" href="{% static '/css/user_search.css' %}">{% endblock %}
+{% block extra_js %} <script type="text/javascript" src="{% static 'js/add_friend.js' %}"></script> {% endblock %}
 
 {% block content %}
 
 <div id="user-list" class="list-group list-group-flush container">
   {% for u in users %}
-  <div id="user-block" class="d-flex flex-row">
-  <a href="/user/{{ u.username }}" class="d-flex justify-content-start flex-row user-item list-group-item list-group-item-action">
-    <div class="image-wrapper align-self-center" class="">
-      <img src="{{ user.profile.avatar_thumbnail }}" alt=""/>
-    </div>
-    <span class="username m-auto">{{ u.username }}</span>
-  </a>
-  <button id="add-friend-button" class="btn">Add friend</button>
+  <div id="user-block" class="d-flex flex-row flex-nowrap align-items-center">
+    <a href="/user/{{ u.username }}" class="d-flex flex-row user-item list-group-item list-group-item-action">
+      <div class="image-wrapper align-self-center" class="">
+        <img src="{{ u.profile.get_avatar_thumbnail }}" alt=""/>
+      </div>
+      <span class="username m-auto">{{ u.username }}</span>
+    </a>
+    <script type="text/javascript">
+      var from_id = {{ user.id }};
+    </script>
+    <button id="{{ u.id }}" class="add-friend-button btn">
+      {% if not u.id in subscriptions %}
+        Subscribe
+      {% else %}
+        Unsubscribe
+      {% endif %}
+    </button>
   </div>
   {% endfor %}
 </div>

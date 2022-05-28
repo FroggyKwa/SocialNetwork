@@ -8,8 +8,8 @@
 <div class="d-flex flex-column container">
   <div class="user-base-info d-flex flex-column">
     <div class=" d-flex">
-      <a href="{{ user.profile.avatar }}" id="avatar-wrapper">
-        <img src="{{ user.profile.get_avatar_thumbnail }}" alt="">
+      <a href="{{ u.profile.get_avatar }}" id="avatar-wrapper">
+        <img src="{{ u.profile.get_avatar_thumbnail }}" alt="">
       </a>
     <div id="name-block">
       <h1 id="username" class="display-3 align-self-center">{{ u.username }}</h1>
@@ -33,7 +33,7 @@
       <hr class="splitter">
       <div class="profile-section">
         <h5 class="section-heading">Age:</h5>
-          <span id="age">{{ user.profile.age }} y.o.</span>
+          <span id="age">{{ u.profile.age }} y.o.</span>
       </div>
     </div>
     {% endif %}
@@ -42,4 +42,7 @@
     {% endif %}
   </div>
 </div>
+{% if not u.profile.is_hidden or u == user %}
+{% include 'post_grid.html' %}
+{% endif %}
 {% endblock %}

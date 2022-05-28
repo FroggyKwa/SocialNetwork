@@ -2,7 +2,7 @@ from rest_framework.exceptions import ValidationError
 
 
 def validate_minimum_size(image):
-    width, height = (1000, 1000)
+    width, height = (512, 512)
     error = False
     if width is not None and image.width < width:
         error = True

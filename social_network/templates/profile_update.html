@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Update profile{% endblock %}
+{% block extra_js %}<script src="{% static 'js/update.js' %}" type="text/javascript"></script>{% endblock %}
+
+{% block extra_head %}<link rel="stylesheet" href="{% static '/css/update_profile.css' %}">{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center">
+<form enctype="multipart/form-data" method="post" class="text-center" action="">
+  <div class="form-name container">
+    <h1 class="form-name display-6">Update profile</h1>
+    </div>
+    <div class="form-description">
+    <p>Please, use the following form to update your profile:</p>
+    </div>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class= "submit-btn btn align-self-center" type="submit" value="Update"/>
+
+  </form>
+  </div>
+{% endblock %}

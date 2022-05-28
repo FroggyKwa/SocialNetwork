@@ -90,13 +90,21 @@ a:hover
 
 #avatar-image-wrapper
 {
-  width: 50px;
+  width: 4em;
+  height: 4em;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px !important;
 }
 
 #avatar-image-wrapper img
 {
-  filter: invert(1);
-  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150%;
   height: auto;
 }
 
@@ -115,7 +123,10 @@ a:hover
   font-size: 1em;
   padding: 3px;
   background-color: #2D2D2D;
-  border: 1px solid #414141;
+  /* border: 1px solid #414141;
+  border-radius: 10px; */
+  margin-left: 1em;
+  border: none;
 }
 #search-button:hover
 {
@@ -137,10 +148,8 @@ a:hover
 
 #search-icon-wrapper:hover
 {
-  filter: invert(0);
+  filter: invert(82%) sepia(8%) saturate(3879%) hue-rotate(96deg) brightness(82%) contrast(77%);
 }
-
-
 
 #search-friends-label
 {
@@ -149,11 +158,16 @@ a:hover
   color: #F5F5F5;
 }
 
+#search-friends
+{
+  border-radius: 0 10px 10px 0;
+}
+
 
 #post-upload-wrapper
 {
   width: 4em;
-  margin-right: 2em;
+  margin-right: 1em;
   margin-top: 0.3em;
 }
 
@@ -163,10 +177,9 @@ a:hover
   transition: filter 0.4s ease;
 }
 
-
 #post-upload-wrapper a img:hover
 {
-  filter: invert(0);
+  filter: invert(82%) sepia(8%) saturate(3879%) hue-rotate(96deg) brightness(82%) contrast(77%);;
 }
 
 #post-upload-image

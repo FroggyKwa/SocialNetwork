@@ -20,4 +20,14 @@ urlpatterns = [
         views.GetUsersQueryByUsernameAPIView.as_view(),
         name="get_query",
     ),
+    path(
+        "update_profile",
+        views.UserUpdateAPIView.as_view(),
+        name="update_profile",
+    ),
+    path(
+        "subscribe",
+        views.SubscribeAPIView.as_view(),
+        name="subscribe_apiview",
+    ),
 ]

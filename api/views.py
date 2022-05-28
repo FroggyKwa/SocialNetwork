@@ -1,11 +1,13 @@
 from django.contrib.auth.models import User
-from django.db.models import Q
 from rest_framework import status
-from rest_framework.generics import RetrieveUpdateAPIView, get_object_or_404
+from rest_framework.generics import (
+    RetrieveUpdateAPIView,
+    get_object_or_404,
+    UpdateAPIView,
+)
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.request import Request
 
 from api.db_methods.post_methods import get_feed_for_user
 
@@ -17,6 +19,8 @@ from api.serializers import (
     PostSerializer,
     PostLikeSerializer,
     PostDislikeSerializer,
+    ProfileUpdateSerializer,
+    SubscribeSerializer,
 )
 from social_network.forms import LoginForm
 from social_network.models import Post
@@ -57,7 +61,7 @@ class LogInApiView(APIView):
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = UserSerializer
     lookup_field = "username"
 
@@ -66,11 +70,23 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         serializer = self.serializer_class(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class UserUpdateAPIView(UpdateAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = ProfileUpdateSerializer
+
     def update(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, partial=True)
+        user = get_object_or_404(User, pk=request.data["user_id"])
+        data = {}
+        for k, v in dict(request.data).items():
+            data[k] = v[0] if v is not None else None
+        data = dict(data, **{"avatar": request.FILES.get("avatar", None)})
+        serializer = self.serializer_class(
+            user,
+            data=data,
+        )
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -129,7 +145,23 @@ class GetUsersQueryByUsernameAPIView(APIView):
         exclude_username = request.data.get("exclude_username", None)
         queryset = (
             User.objects.filter(username__icontains=query_username)
-                .exclude(username__exact=exclude_username)
-                .all()
+            .exclude(username__exact=exclude_username)
+            .all()
         )
         return Response(UserSerializer(queryset, many=True).data)
+
+
+class SubscribeAPIView(APIView):
+    serializer_class = SubscribeSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        post_data = {
+            "from_id": request.data.get("from_id"),
+            "to_id": request.data.get("to_id"),
+        }
+        serializer = self.serializer_class(data=post_data)
+        if serializer.is_valid(raise_exception=True):
+            response = serializer.save()
+            return Response(response, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

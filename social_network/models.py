@@ -22,22 +22,32 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     subscriptions = models.ManyToManyField(User, blank=True, related_name="subscribers")
     avatar = UniqueImageField(
-        upload_to="images/users/avatars/", default="static/images/default.png"
+        upload_to="images/users/avatars/", default=None, blank=True, null=True
     )
     avatar_thumbnail = UniqueImageField(
-        upload_to="images/users/avatars/thumbnails", default="static/images/default.png"
+        upload_to="images/users/avatars/thumbnails",
+        default=None,
+        blank=True,
+        null=True,
     )
+    is_hidden = models.BooleanField(default=False)
 
     def get_avatar(self):
-        return self.avatar
+        if self.avatar:
+            return "/media/" + self.avatar.name
+        return "/static/images/default.png"
 
     def get_avatar_thumbnail(self):
-        return self.avatar_thumbnail
+        if self.avatar_thumbnail:
+            return "/media/" + self.avatar_thumbnail.name
+        return "/static/images/default.png"
 
     def save(self, *args, **kwargs):
+        if self.avatar:
+            self.make_thumbnail()
         super(Profile, self).save(*args, **kwargs)
 
-    def make_thumbnail(self):  # TODO: MAKE IMAGE MODEL
+    def make_thumbnail(self):
         image = Image.open(self.avatar)
         image.thumbnail((512, 512), Image.ANTIALIAS)
         th_name, th_ext = os.path.splitext(self.avatar.name)

@@ -8,16 +8,24 @@
   margin: 1em;
 }
 
-.image-wrapper
-{
-  width: 60px;
+
+.image-wrapper {
+  width: 4em;
+  height: 4em;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px !important;
 }
 
 .image-wrapper img
 {
-  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150%;
   height: auto;
-  vertical-align: middle;
 }
 
 .username
@@ -25,7 +33,7 @@
   font-size: 3em;
 }
 
-#add-friend-button
+.add-friend-button
 {
   white-space: nowrap;
   margin-left: 1em;
@@ -34,7 +42,7 @@
   font-size: 1.5em;
 }
 
-#add-friend-button:hover
+.add-friend-button:hover
 {
   background-color: #F5F5F5;
   color: #2D2D2D;

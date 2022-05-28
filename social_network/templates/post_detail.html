@@ -37,7 +37,7 @@
                 {% else %}
                 <!-- If authorized -->
                 <div class="d-flex flex-row" id="post-upload-wrapper">
-                  <a href="/post_upload" title="Add post">
+                  <a class="d-flex align-items-center" href="/post_upload" title="Add post">
                   <img id="post-upload-image" src="{% static 'images/plus.png' %}" alt="">
                   </a>
                 </div>
@@ -75,6 +75,23 @@
         <h1 class="display-6" id="bio-heading">Description:</h1>
       <p id="bio-text">{{ post.description }}</p>
       </div>
+      <script type="text/javascript">
+        var post_id = {{ post.id }};
+        var user_id = {{ user.id }}
+      </script>
+      <div class="d-flex justify-content-end flex-row container reaction-field">
+        <div class="reaction-button-container">
+          <button class="{% if not is_liked_by_current_user %}unactive{% endif %} reaction-button btn" id="btn-up">
+            <img src="{% static 'images/like.png' %}" alt="">
+            <span class="m-auto text-light like-amount">{{ post.rating }}</span>
+          </button>
+        </div>
+        <div class="reaction-button-container">
+          <button id="btn-down" class="{% if not is_disliked_by_current_user %}unactive{% endif %} reaction-button btn">
+            <img src="{% static 'images/dislike.png' %}" alt="">
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <footer class="mt-auto py-3">
@@ -82,8 +99,8 @@
         <p class="text-center">Copyright &copy; Froggling 2022</p>
      </div>
   </footer>
-  <script src="{% static 'js/base.js' %}" type="text/javascript"></script>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script></body>
+  <script src="{% static 'js/base.js' %}" type="text/javascript"></script>
 </html>

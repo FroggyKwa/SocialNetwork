@@ -3,7 +3,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from dotenv import load_dotenv
-import mimetypes
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -17,7 +17,6 @@ SECRET_KEY = "django-insecure-(48akr%%07pi$!l7b^$jxc7w%^6mzwo(911zub_1(0vzqmfmgt
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-mimetypes.add_type("text/css", ".css", True)
 ALLOWED_HOSTS = ["localhost"]
 DEBUG = True
 
@@ -152,7 +151,7 @@ USE_I18N = True
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
 CKEDITOR_IMAGE_BACKEND = "pillow"

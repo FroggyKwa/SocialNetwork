@@ -1,0 +1,66 @@
+.user-base-info
+{
+  margin: 5em;
+  background-color: #343434;
+  border: 1px solid #717070;
+  border-radius: 10px;
+  padding: 5em 5em 2em 5em;
+}
+
+#name-block
+{
+  margin: 2em;
+}
+
+#avatar-wrapper
+{
+  width: 20em;
+  height: 20em;
+  border-radius: 50%;
+  border: 2px dashed #656565;
+  overflow: hidden;
+  position: relative;
+}
+
+#avatar-wrapper img
+{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150%;
+  height: auto;
+}
+
+.splitter
+{
+  border: 1px dashed #6C6C6C;
+}
+
+.section-heading
+{
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.bio
+{
+  display: inline;
+  overflow-wrap: break-word;
+}
+
+.profile-section
+{
+  margin: 0 2em 0 2em;
+}
+
+#age
+{
+  white-space: nowrap;
+}
+#update-profile
+{
+  margin-top: 5em;
+  white-space: nowrap;
+  width: 10em;
+}
