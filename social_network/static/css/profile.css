@@ -64,3 +64,13 @@
   white-space: nowrap;
   width: 10em;
 }
+
+.popularity-info
+{
+  margin-left: auto;
+}
+
+.popularity-info a
+{
+  margin: 1em;
+}

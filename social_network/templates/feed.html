@@ -7,6 +7,16 @@
 
 {% block content %}
 
+{% if subscriptions %}
+<h5 id="mode-turning" class="text-center"><a href="/">Show all posts</a></h5>
+{% else %}
+<h5 id="mode-turning" class="text-center"><a href="/news/following_posts">Show following posts only</a></h5>
+{% endif %}
+
+
+
+
+
 {% if post %}
 <div class="post">
   <a href="post/{{ post.id }}">

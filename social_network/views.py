@@ -20,10 +20,11 @@ from social_network.forms import (
     PostUploadForm,
     ProfileUpdateForm,
 )
+from .helpers import get_subs
 from social_network.models import Post
 
 
-class IndexView(LoginRequiredMixin, View):
+class MainFeed(LoginRequiredMixin, View):
     login_url = "login_view"
     redirect_field_name = "redirect_to"
 
@@ -31,7 +32,33 @@ class IndexView(LoginRequiredMixin, View):
         feed = requests.get(
             "http://localhost:8080/api/get_feed", data={"user_id": request.user.id}
         ).json()
-        return render(request, "feed.html", context={"post": feed[0] if feed else None})
+        return render(
+            request,
+            "feed.html",
+            context={
+                "post": feed[0] if feed else None,
+                "subscriptions": False,
+            },
+        )
+
+
+class FriendsFeed(LoginRequiredMixin, View):
+    login_url = "login_view"
+    redirect_field_name = "redirect_to"
+
+    def get(self, request, *args, **kwargs):
+        feed = requests.get(
+            "http://localhost:8080/api/get_feed/subscriptions",
+            data={"user_id": request.user.id},
+        ).json()
+        return render(
+            request,
+            "feed.html",
+            context={
+                "post": feed[0] if feed else None,
+                "subscriptions": True,
+            },
+        )
 
 
 class LoginView(View):
@@ -113,7 +140,6 @@ class PostUploadView(View, LoginRequiredMixin):
                 files={"picture_url": request.FILES["picture_url"]},
                 headers={"sessionid": session_id, "csrftoken": csrf_token},
             )
-            print(response.json())
             if response.status_code == 201:
                 return render(request, "success.html")
             else:
@@ -162,6 +188,7 @@ class UserSearchView(View, LoginRequiredMixin):
             request,
             "users_search.html",
             context={
+                "heading": "Search",
                 "users": users,
                 "subscriptions": list(
                     map(lambda x: x.id, request.user.profile.subscriptions.all())
@@ -180,11 +207,15 @@ class ProfilePageView(View, LoginRequiredMixin):
             user = User.objects.get(username__exact=username)
         except ObjectDoesNotExist:
             raise Http404
-        print(user.liked_posts.all())
         return render(
             request,
             "profile_page.html",
-            context={"u": user, "liked_posts": user.liked_posts.all()},
+            context={
+                "u": user,
+                "liked_posts": user.liked_posts.all(),
+                "subs": get_subs(username, request),
+                "followed": user in request.user.profile.subscriptions.all()
+            },
         )
 
 
@@ -232,4 +263,44 @@ class ProfileUpdateView(View, LoginRequiredMixin):
                     form.add_error(None, error)
         return render(
             request, "profile_update.html", {"form": form, "errors": form.errors}
+        )
+
+
+class SubscribersListView(View, LoginRequiredMixin):
+    login_url = "login_view"
+    redirect_field_name = "redirect_to"
+
+    def get(self, request, username, *args, **kwargs):
+        subs = get_subs(username, request)
+        context = {
+            "heading": "Subscribers",
+            "users": subs["subscribers"],
+            "subscriptions": list(
+                map(lambda x: x.id, request.user.profile.subscriptions.all()),
+            ),
+        }
+        return render(
+            request,
+            "users_search.html",
+            context=context,
+        )
+
+
+class SubscriptionsListView(View, LoginRequiredMixin):
+    login_url = "login_view"
+    redirect_field_name = "redirect_to"
+
+    def get(self, request, username, *args, **kwargs):
+        subs = get_subs(username, request)
+        context = {
+            "heading": "Subscriptions",
+            "users": subs["subscriptions"],
+            "subscriptions": list(
+                map(lambda x: x.id, request.user.profile.subscriptions.all()),
+            ),
+        }
+        return render(
+            request,
+            "users_search.html",
+            context=context,
         )

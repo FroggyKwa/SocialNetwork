@@ -3,20 +3,37 @@
 {% load static %}
 
 {% block extra_head %}<link rel="stylesheet" href="{% static 'css/profile.css' %}"> {% endblock %}
+{% block extra_js %} <script type="text/javascript" src="{% static 'js/add_friend.js' %}"></script> {% endblock %}
 
 {% block content %}
 <div class="d-flex flex-column container">
   <div class="user-base-info d-flex flex-column">
-    <div class=" d-flex">
+    <div class="d-flex">
       <a href="{{ u.profile.get_avatar }}" id="avatar-wrapper">
         <img src="{{ u.profile.get_avatar_thumbnail }}" alt="">
       </a>
-    <div id="name-block">
-      <h1 id="username" class="display-3 align-self-center">{{ u.username }}</h1>
-      <h3 class="align-self-center real-name">{{ u.first_name }} {{ u.last_name }}</h3>
-    </div>
-
-
+      <div class="d-flex left-info flex-column">
+        <div id="name-block">
+          <h1 id="username" class="display-3 align-self-center">{{ u.username }}</h1>
+          <h3 class="align-self-center real-name">{{ u.first_name }} {{ u.last_name }}</h3>
+        </div>
+        <div class="popularity-info d-flex align-items-start">
+          <a href="/user/{{ u.username }}/subscribers">{{ subs.subscribers|length }} subscribers</a>
+          <a href="/user/{{ u.username }}/subscriptions">{{ subs.subscriptions|length }} subscriptions</a>
+          {% if u != user %}
+          <script type="text/javascript">
+            var from_id = {{ user.id }};
+          </script>
+          <button id="{{ u.id }}" class="add-friend-button btn">
+            {% if not followed %}
+              Subscribe
+            {% else %}
+              Unsubscribe
+            {% endif %}
+          </button>
+          {% endif %}
+        </div>
+      </div>
     </div>
     {% if u.profile.bio or u.profile.phone or u.profile.age %}
     <hr class="splitter">

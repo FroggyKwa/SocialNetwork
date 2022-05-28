@@ -32,18 +32,3 @@
 {
   font-size: 3em;
 }
-
-.add-friend-button
-{
-  white-space: nowrap;
-  margin-left: 1em;
-  border-color: #F5F5F5;
-  color: #F5F5F5;
-  font-size: 1.5em;
-}
-
-.add-friend-button:hover
-{
-  background-color: #F5F5F5;
-  color: #2D2D2D;
-}

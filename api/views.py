@@ -135,6 +135,14 @@ class GetUserFeedAPIView(APIView):
         return Response(PostSerializer(get_feed_for_user(user), many=True).data)
 
 
+class GetUserFriendsFeed(APIView):
+    def get(self, request, *args, **kwargs):
+        user = get_object_or_404(User, id=request.data.get("user_id", None))
+        return Response(
+            PostSerializer(get_feed_for_user(user, subscriptions=True), many=True).data
+        )
+
+
 class GetUsersQueryByUsernameAPIView(APIView):
     permission_classes = [
         # IsAuthenticated,
@@ -165,3 +173,22 @@ class SubscribeAPIView(APIView):
             response = serializer.save()
             return Response(response, status=status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class GetUserSubsAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        user_id = request.data.get("user_id")
+        user = get_object_or_404(User, pk=user_id)
+        if user:
+            return Response(
+                data={
+                    "subscribers": UserSerializer(
+                        map(lambda x: x.user, user.subscribers.all()), many=True
+                    ).data,
+                    "subscriptions": UserSerializer(
+                        user.profile.subscriptions.all(), many=True
+                    ).data,
+                },
+                status=status.HTTP_200_OK,
+            )
+        return Response("User not found", status=status.HTTP_404_NOT_FOUND)

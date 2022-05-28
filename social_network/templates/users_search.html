@@ -2,12 +2,16 @@
 
 {% load static %}
 
+{% block title %}Search{% endblock %}
+
+
 {% block extra_head %}<link rel="stylesheet" href="{% static '/css/user_search.css' %}">{% endblock %}
 {% block extra_js %} <script type="text/javascript" src="{% static 'js/add_friend.js' %}"></script> {% endblock %}
 
 {% block content %}
 
 <div id="user-list" class="list-group list-group-flush container">
+  <h1 class="display-4">{{ heading }}:</h1>
   {% for u in users %}
   <div id="user-block" class="d-flex flex-row flex-nowrap align-items-center">
     <a href="/user/{{ u.username }}" class="d-flex flex-row user-item list-group-item list-group-item-action">

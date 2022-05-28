@@ -16,6 +16,11 @@ urlpatterns = [
     path("post_info", views.PostRetrieveUpdateAPIView.as_view(), name="post_info"),
     path("get_feed", views.GetUserFeedAPIView.as_view(), name="get_feed"),
     path(
+        "get_feed/subscriptions",
+        views.GetUserFriendsFeed.as_view(),
+        name="get_subscriptions_feed",
+    ),
+    path(
         "query_by_username",
         views.GetUsersQueryByUsernameAPIView.as_view(),
         name="get_query",
@@ -30,4 +35,5 @@ urlpatterns = [
         views.SubscribeAPIView.as_view(),
         name="subscribe_apiview",
     ),
+    path("get_subs", views.GetUserSubsAPIView.as_view(), name="get_subs"),
 ]

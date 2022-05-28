@@ -71,3 +71,13 @@
 {
   filter: invert(0);
 }
+
+#mode-turning a
+{
+  color: #363535;
+}
+
+#mode-turning a:hover
+{
+  color: #808080;
+}

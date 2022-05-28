@@ -8,6 +8,18 @@ body
   color: #F5F5F5;
 }
 
+input[type=text], input[type=search], input[type=email], input[type=password]
+{
+  border: 2px solid #F5F5F5;
+}
+
+input[type=text]:focus, input[type=search]:focus, input[type=email]:focus, input[type=password]:focus
+{
+  border-color: #34BF89;
+  box-shadow: 0 0 7px #34BF89;
+  outline: none;
+}
+
 a
 {
   transition: all 0.2s ease-out;
@@ -200,6 +212,20 @@ a:hover
   color: #2D2D2D;
 }
 
+.add-friend-button
+{
+  white-space: nowrap;
+  margin-left: 1em;
+  border-color: #F5F5F5;
+  color: #F5F5F5;
+  font-size: 1.5em;
+}
+
+.add-friend-button:hover
+{
+  background-color: #F5F5F5;
+  color: #2D2D2D;
+}
 
 footer {
   font-family: 'Nunito', sans-serif;
