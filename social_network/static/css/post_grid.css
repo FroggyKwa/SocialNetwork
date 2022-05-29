@@ -1,0 +1,42 @@
+.post
+{
+  width: 100px;
+  height: 200px;
+}
+
+.image-wrapper
+{
+  border-radius: 5%;
+  overflow: hidden;
+}
+
+.image-wrapper img
+{
+  width: 100%;
+  height: auto;
+}
+
+table
+{
+  border-spacing: 1em;
+  border-collapse: separate;
+  background-color: #343434;
+  border: 1px solid #717070;
+  border-radius: 10px;
+}
+
+table td
+{
+  width: 300px;
+  height: 300px;
+  border: 1px solid #717070;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border 0.3s;
+}
+
+table td:hover
+{
+  border: 1px solid #34BF89;
+
+}

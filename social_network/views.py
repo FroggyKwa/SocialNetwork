@@ -6,13 +6,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import (
     HttpResponse,
     HttpResponseRedirect,
-    HttpResponseNotFound,
     Http404,
 )
 from django.middleware.csrf import get_token
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.views import View
-from rest_framework import status
 
 from social_network.forms import (
     LoginForm,
@@ -304,3 +302,6 @@ class SubscriptionsListView(View, LoginRequiredMixin):
             "users_search.html",
             context=context,
         )
+
+# TODO: add user circle in the post
+# TODO: 
