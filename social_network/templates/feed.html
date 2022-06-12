@@ -14,12 +14,9 @@
 {% endif %}
 
 
-
-
-
 {% if post %}
 <div class="post">
-  <a href="post/{{ post.id }}">
+  <a href="/post/{{ post.id }}">
     <h2 class="post-name">{{ post.name }}</h2>
   <img src="{{ post.picture_url }}" alt="" class="img-fluid">
   </a>
@@ -37,7 +34,7 @@
     </div>
   </div>
   <div class="d-flex justify-content-center">
-    <a href= "" id="next-btn" class="d-none btn next-button" name="button">
+    <a href= "" id="next-btn" class="d-none btn navigation-button" name="button">
       <img src="{% static 'images/next.png' %}" alt="">
     </a>
   </div>

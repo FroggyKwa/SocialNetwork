@@ -81,7 +81,7 @@ class LoginView(View):
                 login(request, user)
                 return HttpResponseRedirect("/")
             else:
-                for error in response.json()["non_field_errors"]:
+                for error in response.json().get("non_field_errors", []):
                     form.add_error(None, error)
         return render(request, "login.html", {"form": form, "errors": form.errors})
 
@@ -109,8 +109,10 @@ class SignUpView(View):
                 login(request, user)
                 return HttpResponseRedirect("/")
             else:
-                for error in response.json()["non_field_errors"]:
+                for error in response.json().get("non_field_errors", []):
                     form.add_error(None, error)
+                for field, error_msg in response.json().items():
+                    form.add_error(None, error_msg)
         return render(request, "signup.html", {"form": form, "errors": form.errors})
 
 
@@ -154,6 +156,7 @@ class PostDetailView(View, LoginRequiredMixin):
 
     def get(self, request, post_id, *args, **kwargs):
         post = get_object_or_404(Post, pk=post_id)
+        print(request.META.get("HTTP_REFERER"))
         return render(
             request,
             "post_detail.html",
@@ -161,6 +164,7 @@ class PostDetailView(View, LoginRequiredMixin):
                 "post": post,
                 "is_liked_by_current_user": request.user in post.likes.all(),
                 "is_disliked_by_current_user": request.user in post.dislikes.all(),
+                "back": request.META.get("HTTP_REFERER"),
             },
         )
 

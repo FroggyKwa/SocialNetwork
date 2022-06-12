@@ -52,14 +52,14 @@
     filter: grayscale(0%);
 }
 
-.next-button
+.navigation-button
 {
   border:none;
   padding: 0;
   display: block;
   width: 70px;
 }
-.next-button img
+.navigation-button img
 {
   width: 100%;
   height: auto;
@@ -67,9 +67,14 @@
   transition: 0.3s;
 }
 
-.next-button img:hover
+.navigation-button img:hover
 {
   filter: invert(0);
+}
+
+#backward-button
+{
+  margin-left: 3em;
 }
 
 #mode-turning a
